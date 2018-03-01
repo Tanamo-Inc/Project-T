@@ -1,0 +1,10 @@
+#ignore this files
+
+# Folder config file
+Desktop.ini
+
+.DS_Store
+*.idea
+*.class
+# workspace files are user-specific
+*.sublime-workspace
