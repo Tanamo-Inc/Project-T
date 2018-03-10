@@ -3,31 +3,8 @@ require_once '../class/fun.php';
 $fxn = new fun();
 session_start();
 
-function video_up($vids)
-{
-    $vurl = "";
-    $fileSize = $_FILES['vile']['size'];
-    $fileType = $_FILES['vile']['type'];
 
-    if ($fileType != 'mp4' && $fileType != 'wmv' && $fileType != 'avi') {
-        echo('Only mp4,wmv and avi allowed');
-    } else if ($fileSize > 10485760) {
-        echo('File should not be more than 10mb');
-    } else {
-        if ($_FILES["soundfile"]["error"] > 0) {
-            echo "Error: " . $_FILES["vile"]["error"];
-        } else {
-            if (move_uploaded_file($_FILES["vile"]["tmp_name"], "../public/sto/" . $_FILES["vile"]["name"])) {
-                $vurl = "http://" . $_SERVER["HTTP_HOST"] . dirname($_SERVER['REQUEST_URI']) . "/../public/sto/" . $_FILES["vile"]["name"];
-            } else
-                echo "Directory not found";
-        }
-    }
-
-    return $vurl;
-}
-
-function img_box($file, $dest, $i_width = 160, $i_height = 160)
+function img_box($file, $dest, $i_width = 170, $i_height = 170)
 {
     $image_source = getimagesize($file);
     $source_mime = $image_source['mime'];
@@ -97,7 +74,7 @@ function img_up($fil, $create_small)
                         //create small image file
                         $fxn = new fun();
                         $smallimageurl = $fxn->dupImage($_FILES["file"]["name"]);
-                        img_box($imageurl, $smallimageurl, 160, 160);
+                        img_box($imageurl, $smallimageurl, 170, 170);
                     }
                 } else
                     echo "Directory not found";
@@ -110,7 +87,7 @@ function img_up($fil, $create_small)
     return $imageurl;
 }
 
-function sound_up($soundfiles)
+function sound_up($ff)
 {
     $soundurl = "";
     $fileSize = $_FILES['soundfile']['size'];
@@ -134,6 +111,30 @@ function sound_up($soundfiles)
     return $soundurl;
 }
 
+function video_up($vids)
+{
+    $vurl = "";
+    $fileSize = $_FILES['vile']['size'];
+    $fileType = $_FILES['vile']['type'];
+
+    if ($fileType != 'mp4' && $fileType != 'wmv' && $fileType != 'avi') {
+        echo('Only mp4,wmv and avi allowed');
+    } else if ($fileSize > 10485760) {
+        echo('File should not be more than 10mb');
+    } else {
+        if ($_FILES["vile"]["error"] > 0) {
+            echo "Error: " . $_FILES["vile"]["error"];
+        } else {
+            if (move_uploaded_file($_FILES["vile"]["tmp_name"], "../public/sto/" . $_FILES["vile"]["name"])) {
+                $vurl = "http://" . $_SERVER["HTTP_HOST"] . dirname($_SERVER['REQUEST_URI']) . "/../public/sto/" . $_FILES["vile"]["name"];
+            } else
+                echo "Directory not found";
+        }
+    }
+
+    return $vurl;
+}
+
 //Listener methods
 if (!empty($_POST['tag'])) {
 
@@ -149,7 +150,7 @@ if (!empty($_POST['tag'])) {
 
         foreach ($images as $key => $image) {
             if ($image['id'] == $_POST['id']) {
-                unlink("../public/storage/" . basename($image["imageurl"]));
+                unlink("../public/sto/" . basename($image["imageurl"]));
                 unlink($fxn->dupImage($image["imageurl"]));
             }
         }
@@ -157,13 +158,14 @@ if (!empty($_POST['tag'])) {
     }
 
     if ($_POST['tag'] == "add_vid") {
+        $vimg = img_up($fil, false);
 
-        $soundurl = video_up($_FILES);
+        $vurl = video_up($vids);
 
         if ($_POST['id'] == 0)
-            $fxn->newVideo($_POST['title'], $soundurl);
+            $fxn->newVideo($_POST['title'], $vimg, $vurl);
         else
-            $fxn->updateVideo($_POST['id'], $_POST['title'], $soundurl);
+            $fxn->updateVideo($_POST['id'], $_POST['title'], $vimg, $vurl);
     }
 
     if ($_POST['tag'] == "del_vid") {
@@ -171,7 +173,7 @@ if (!empty($_POST['tag'])) {
 
         foreach ($vvid as $key => $vvi) {
             if ($vvi['id'] == $_POST['id']) {
-                unlink("../public/storage/" . basename($vvi["vurl"]));
+                unlink("../public/sto/" . basename($vvi["vurl"]));
             }
         }
 
@@ -181,7 +183,7 @@ if (!empty($_POST['tag'])) {
     if ($_POST['tag'] == "add_pod") {
 
         $imageurl = img_up($fil, false);
-        $soundurl = sound_up($_FILES);
+        $soundurl = sound_up($ff);
 
         if ($_POST['id'] == 0)
             $fxn->newPod($_POST['lyric'], $_POST['title'], $imageurl, $soundurl);
@@ -194,7 +196,7 @@ if (!empty($_POST['tag'])) {
 
         foreach ($songs as $key => $song) {
             if ($song['id'] == $_POST['id']) {
-                unlink("../public/storage/" . basename($song["imageurl"]));
+                unlink("../public/sto/" . basename($song["imageurl"]));
             }
         }
 

@@ -7,7 +7,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="IE=edge"/>
-    <title>Success</title>
+    <title>Project T</title>
     <link rel="stylesheet" href="../public/css/main.css">
 </head>
 <body>

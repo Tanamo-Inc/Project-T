@@ -12,7 +12,7 @@ if (isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && 
     $hash = $db->connect()->escape_string($_GET['hash']);
 
     // Make sure user email with matching hash exist
-    $result = $db->connect()->query("SELECT * FROM users WHERE email='$email' AND hash='$hash'");
+    $result = $db->connect()->query("SELECT * FROM admin WHERE email='$email' AND hash='$hash'");
 
     if ($result->num_rows == 0) {
         $_SESSION['message'] = "You have entered invalid URL for password reset!";

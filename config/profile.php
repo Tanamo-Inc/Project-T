@@ -8,8 +8,8 @@ if ($_SESSION['logged_in'] != 1) {
     header("location: error.php");
 } else {
     // Makes it easier to read
-    $first_name = $_SESSION['first_name'];
-    $last_name = $_SESSION['last_name'];
+    $fname = $_SESSION['fname'];
+    $lname = $_SESSION['lname'];
     $email = $_SESSION['email'];
     $active = $_SESSION['active'];
 }
@@ -55,7 +55,7 @@ if ($_SESSION['logged_in'] != 1) {
     }
     ?>
 
-    <h1><?php echo $first_name . ' ' . $last_name; ?></h1>
+    <h1><?php echo $fname . ' ' . $lname; ?></h1>
 
     <h1><a><?= $email ?></a></h1>
 

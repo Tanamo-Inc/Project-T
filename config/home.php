@@ -86,12 +86,14 @@ session_start();
         <?php
         $images = $fxn->disImag();
         if ($images == null) {
-            echo("<h3 class='center'>No Images yet</h3>");
+            echo("<h3 class='center'>Empty Content</h3>");
         } else {
             foreach ($images as $image) {
                 echo("<div class='box'>" .
+                    "<div class='boxo'>" .
                     "<input type='hidden' name='id' class='id' value='" . $image["id"] . "'/>" .
                     "<img class='box_gal'src='" . "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . "/" . ($fxn->dupImage($image['imageurl'])) . "' alt='image'>" .
+                    "</div>" .
                     "<div class='iconbar'>" .
                     "<i class='fa fa-trash-o del_img'></i> " .
                     "</div>" .
@@ -107,7 +109,7 @@ session_start();
         <div class="cc">
             <i class="fa fa-2x fa-plus adder"></i>
             <?php
-            $fxn->add_Vid(0, "", "");
+            $fxn->add_Vid(0, "", "", "");
             ?>
         </div>
 
@@ -117,20 +119,21 @@ session_start();
         <?php
         $vid = $fxn->disVideo();
         if ($vid == null) {
-            echo("<h3 class='center'>No Videos yet</h3>");
+            echo("<h3 class='center'>Empty Content</h3>");
         } else {
             foreach ($vid as $vids) {
                 echo("<div class='box'>" .
-                    "<img class='box_vid' src='" . $vids['vurl'] . "' alt='videos'>" .
+                    "<div class='boxo'>" .
+                    "<img class='box_vid' src='" . $vids['vimg'] . "' alt='v_img'>" .
                     "<div class='box_vid_info'>" .
                     "<p>" . htmlspecialchars($vids["title"]) . "</p>" .
-                    "<p>" . htmlspecialchars(substr($vids["title"], 0, 40)) . "..." . "</p>" .
+                    "</div>" .
                     "<div class='iconbar'>" .
                     "<i class='fa fa-edit add_vid'></i>" .
                     "<i class='fa fa-trash-o del_vid'></i>" .
                     "</div>" .
                     "</div>");
-                $fxn->add_Vid($vids["id"], htmlspecialchars($vids["title"]), $vids["vurl"]);
+                $fxn->add_Vid($vids["id"], htmlspecialchars($vids["title"]), $vids["vimg"], $vids["vurl"]);
                 echo("</div>");
             }
         }
@@ -147,24 +150,28 @@ session_start();
             ?>
         </div>
 
-        <h2>PodCast</h2>
+        <h2>PodCasts</h2>
 
 
         <!--show all-->
         <?php
         $pods = $fxn->disPod();
         if ($pods == null) {
-            echo("<h3 class='center'>Empty PodCast</h3>");
+            echo("<h3 class='center'>Empty Content</h3>");
         } else {
             foreach ($pods as $pod) {
                 echo("<div class='box'>" .
+                    "<div class='boxo'>" .
                     "<img class='box_img_sng' src='" . $pod['imageurl'] . "' alt='podcast'>" .
                     "<div class='box_info_sng'>" .
                     "<p>" . htmlspecialchars($pod["title"]) . "</p>" .
-                    "<p>" . htmlspecialchars(substr($pod["lyric"], 0, 40)) . "..." . "</p>" .
+                    "<br/>" .
+                    "<p>" . htmlspecialchars(substr($pod["lyric"], 0, 35)) . "..." . "</p>" .
+                    "</div>" .
                     "<div class='iconbar'>" .
                     "<i class='fa fa-edit add_pod'></i>" .
                     "<i class='fa fa-trash-o del_pod'></i>" .
+
                     "</div>" .
                     "</div>");
                 $fxn->add_Pod($pod["id"], htmlspecialchars($pod["title"]), htmlspecialchars($pod["lyric"]), $pod["imageurl"], $pod["soundurl"]);
@@ -190,12 +197,14 @@ session_start();
         <?php
         $news = $fxn->disNews();
         if ($news == null) {
-            echo("<h3 class='center'>No News yet</h3>");
+            echo("<h3 class='center'>Empty Content</h3>");
         } else {
             foreach ($news as $new) {
                 echo("<div class='box'>" .
+                    "<div class='boxo'>" .
                     "<p>" . htmlspecialchars($new["title"]) . "</p>" .
-                    "<p>" . htmlspecialchars(substr($new["news"], 0, 40)) . "..." . "</p>" .
+                    "<p>" . htmlspecialchars(substr($new["news"], 0, 80)) . "..." . "</p>" .
+                    "</div>" .
                     "<div class='iconbar'>" .
                     "<i class='fa fa-edit add_news'></i>" .
                     "<i class='fa fa-trash-o del_news'></i>" .

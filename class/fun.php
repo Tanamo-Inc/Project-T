@@ -27,13 +27,14 @@ class fun
 
 ######################################################################
 //add new videos to database.
-    public function newVideo($title, $vurl)
+    public function newVideo($title, $vimg, $vurl)
     {
         $title = mysqli_real_escape_string($this->conn, $title);
+        $vimg = mysqli_real_escape_string($this->conn, $vimg);
         $vurl = mysqli_real_escape_string($this->conn, $vurl);
 
 
-        $result = mysqli_query($this->conn, "INSERT INTO videos(title, vurl) VALUES('$title', '$vurl')");
+        $result = mysqli_query($this->conn, "INSERT INTO videos(title,vimg, vurl) VALUES('$title', '$vimg','$vurl')");
 // check for successful store
         if ($result) {
             return true;
@@ -43,19 +44,25 @@ class fun
     }
 
     //update  videos in the database
-    public function updateVideo($id, $title, $vurl)
+    public function updateVideo($id, $title, $vimg, $vurl)
     {
         $id = mysqli_real_escape_string($this->conn, $id);
         $title = mysqli_real_escape_string($this->conn, $title);
+        $vimg = mysqli_real_escape_string($this->conn, $vimg);
         $vurl = mysqli_real_escape_string($this->conn, $vurl);
 
+
+        if (strlen($vimg) > 2)
+            $vimg = ", vimg = '$vimg'";
+        else
+            $vimg = "";
 
         if (strlen($vurl) > 2)
             $vurl = ", vurl = '$vurl'";
         else
             $vurl = "";
 
-        $result = mysqli_query($this->conn, "UPDATE videos SET title='$title', " . $vurl . " WHERE id='$id'");
+        $result = mysqli_query($this->conn, "UPDATE videos SET title='$title', " . $vimg . $vurl . " WHERE id='$id'");
 
 // check for successful store
         if ($result) {
@@ -80,7 +87,7 @@ class fun
     //Return all videos from database
     public function disVideo()
     {
-        $result = mysqli_query($this->conn, "SELECT id, title,vurl from videos");
+        $result = mysqli_query($this->conn, "SELECT id, title,vimg,vurl from videos");
 // check for successful store
         if ($result) {
             $records = array();
@@ -270,7 +277,7 @@ class fun
 
 ######################################################################
 
-    public function add_Vid($id, $title, $vurl)
+    public function add_Vid($id, $title, $vimg, $vurl)
     {
         echo("<div class='main_editor'>" .
             "<div class='editor'>" .
@@ -283,12 +290,20 @@ class fun
                               <h3>Title</h3>
                               <p><input type='text' name='title'  value='" . $title . "'/></p>
                           </div>
+                          <div class='edit-row'>
+                              <h3>Upload Video Image.</h3>
+                              <p>Accepted formats: .gif, .png, .jpeg, .jpg. Max file size: 1MB.</p>
+                              <p><label for='file'>Filename:</label></p>
+                              <p><input type='file' name='file' id='file'><br></p>
+                              <p>Current Video Image: " . $vimg . "</p>
+                          </div>
                          
                           <div class='edit-row'>
                               <h3>Upload Video</h3>
                               <p>Accepted formats: .MP4,.WMV,.AVI Max file size: 10MB.</p>
                               <p><label for='vile'>Filename:</label></p>
                               <p><input type='file' name='vile' id='vile'><br></p>
+                                <p>Current video Url: " . $vurl . "</p>
                            
                           </div>
                           <center><button type='submit' name='Submit'>Save</button></center>
@@ -378,7 +393,7 @@ class fun
                               <p>Enter the News.</p>
                               <p><textarea type='text' name='news'  />" . $news . "</textarea></p>
                           </div>
-                          <p><button type='submit' name='Submit'>Save</button></p>
+                       <center><button type='submit' name='Submit'>Save</button></center> 
                     </form>" .
             "</div>" .
             "</div>");

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $db->connect()->escape_string($_POST['email']);
         $hash = $db->connect()->escape_string($_POST['hash']);
 
-        $sql = "UPDATE users SET password='$new_password', hash='$hash' WHERE email='$email'";
+        $sql = "UPDATE admin SET password='$new_password', hash='$hash' WHERE email='$email'";
 
         if ($db->connect()->query($sql)) {
 

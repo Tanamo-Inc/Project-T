@@ -13,7 +13,7 @@ if (isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && 
     $hash = $db->connect()->escape_string($_GET['hash']);
 
     // Select user with matching email and hash, who hasn't verified their account yet (active = 0)
-    $result = $db->connect()->query("SELECT * FROM users WHERE email='$email' AND hash='$hash' AND active='0'");
+    $result = $db->connect()->query("SELECT * FROM admin WHERE email='$email' AND hash='$hash' AND active='0'");
 
     if ($result->num_rows == 0) {
         $_SESSION['message'] = "Account has already been activated or the URL is invalid!";
@@ -23,7 +23,7 @@ if (isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && 
         $_SESSION['message'] = "Your account has been activated!";
 
         // Set the user status to active (active = 1)
-        $db->connect()->query("UPDATE users SET active='1' WHERE email='$email'") or die($mysqli->error);
+        $db->connect()->query("UPDATE admin SET active='1' WHERE email='$email'") or die($mysqli->error);
         $_SESSION['active'] = 1;
 
         header("location: success.php");

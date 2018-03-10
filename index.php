@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $email = $db->connect()->escape_string($_POST['email']);
 
-        $result = $db->connect()->query("SELECT * FROM users WHERE email='$email'");
+        $result = $db->connect()->query("SELECT * FROM admin WHERE email='$email'");
 
 
         if ($result->num_rows == 0) {
@@ -45,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (password_verify($_POST['password'], $user['password'])) {
 
                 $_SESSION['email'] = $user['email'];
-                $_SESSION['first_name'] = $user['first_name'];
-                $_SESSION['last_name'] = $user['last_name'];
+                $_SESSION['fname'] = $user['fname'];
+                $_SESSION['lname'] = $user['lname'];
                 $_SESSION['active'] = $user['active'];
 
 
@@ -63,18 +63,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['register'])) {
 
         $_SESSION['email'] = $_POST['email'];
-        $_SESSION['first_name'] = $_POST['firstname'];
-        $_SESSION['last_name'] = $_POST['lastname'];
+        $_SESSION['fname'] = $_POST['fname'];
+        $_SESSION['lname'] = $_POST['lname'];
 
 // Escape all $_POST variables to protect against SQL injections
-        $first_name = $db->connect()->escape_string($_POST['firstname']);
-        $last_name = $db->connect()->escape_string($_POST['lastname']);
+        $fname = $db->connect()->escape_string($_POST['fname']);
+        $lname = $db->connect()->escape_string($_POST['lname']);
         $email = $db->connect()->escape_string($_POST['email']);
         $password = $db->connect()->escape_string(password_hash($_POST['password'], PASSWORD_BCRYPT));
         $hash = $db->connect()->escape_string(md5(rand(0, 1000)));
 
 // Check if user with that email already exists
-        $result = $db->connect()->query("SELECT * FROM users WHERE email='$email'") or die($db->connect()->error());
+        $result = $db->connect()->query("SELECT * FROM admin WHERE email='$email'") or die($db->connect()->error());
 
 // We know user email exists if the rows returned are more than 0
         if ($result->num_rows > 0) {
@@ -83,8 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("location: config/error.php");
         } else { // Email doesn't already exist in a database, proceed...
             // active is 0 by DEFAULT (no need to include it here)
-            $sql = "INSERT INTO users (first_name, last_name, email, password, hash) "
-                . "VALUES ('$first_name','$last_name','$email','$password', '$hash')";
+            $sql = "INSERT INTO admin (fname, lname, email, password, hash) "
+                . "VALUES ('$fname','$lname','$email','$password', '$hash')";
 
             // Add user to the database
             if ($db->connect()->query($sql)) {
@@ -98,13 +98,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $to = $email;
                 $subject = 'Verification';
                 $message_body = '
-        Hello ' . $first_name . ',
+        Hello ' . $fname . ',
 
         Thank you for signing up!
 
         Please click this link to activate your account:
 
-        http://localhost/login-system/verify.php?email=' . $email . '&hash=' . $hash;
+        http://localhost/Project-T/config/verify.php?email=' . $email . '&hash=' . $hash;
 
                 mail($to, $subject, $message_body);
 
@@ -167,14 +167,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label>
                             First Name<span class="req">*</span>
                         </label>
-                        <input type="text" required autocomplete="off" name='firstname'/>
+                        <input type="text" required autocomplete="off" name='fname'/>
                     </div>
 
                     <div class="wrapo">
                         <label>
                             Last Name<span class="req">*</span>
                         </label>
-                        <input type="text" required autocomplete="off" name='lastname'/>
+                        <input type="text" required autocomplete="off" name='lname'/>
                     </div>
                 </div>
 

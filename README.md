@@ -1,6 +1,6 @@
 # Project T v.1.0.0
 
-Feel free to Contribute to Project T.
+Simplify project for PHP beginners.
 
 
 

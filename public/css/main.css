@@ -449,6 +449,13 @@ label.highlight {
     position: relative;
 }
 
+.boxo {
+    margin-top: 3px;
+    padding: 1px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
 .box_gal {
     width: 245px;
     height: 130px;
